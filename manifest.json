@@ -1,9 +1,12 @@
 {
   "name": "WikiAPPP",
   "version": "1.0",
-  "description": "Build an Extension!",
+  "description": "Look up Wiki with double click!",
   "manifest_version": 2,
-  "permissions": ["activeTab" ],
+  "permissions": ["activeTab", "storage"],
+   "browser_action": {
+        "default_popup": "popup.html"
+    },
   "content_scripts": [
     {
 	
