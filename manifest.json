@@ -11,7 +11,7 @@
     {
 	
       "matches": ["<all_urls>"],
-		"js": ["contentScript.js"],
+		"js": ["Furi.js", "Pinyin.js","contentScript.js"],
       "run_at": "document_end",
       "all_frames": true
     }]

@@ -26,7 +26,6 @@ document.addEventListener('mouseup', async function (e) {
 	if (chrome.storage.sync)
 	{
 		chrome.storage.sync.get("wikiLang", function (obj) {
-			console.log(obj);
 			if (obj) {
 				lang = obj.wikiLang;
 			}
@@ -37,27 +36,54 @@ document.addEventListener('mouseup', async function (e) {
 	if (lang == 'off') return;
 	var selection = window.getSelection().toString();
 	if (selection.length > 0) {
-	  
-	console.log(selection);
-	let keyObjs = await getObjKeywords(selection, lang);
-	for(let keyObj of keyObjs) {
-		
-	console.log("nap tu");
-		let liDOM = document.createElement('li');
-		liDOM.addEventListener('mouseover', renderContent);
+		switch(lang) {
+			// Case: Search wikipedia
+			case 'en':
+			case 'vi':
+				let keyObjs = await getObjKeywords(selection, lang);
+				
+				for(let keyObj of keyObjs) {
+					
+					let liDOM = document.createElement('li');
+					liDOM.addEventListener('mouseover', renderContent);
 
-		let lict = keyObj.title;
-		liDOM.innerText = lict;
-		ulDOM.appendChild(liDOM);
+					let lict = keyObj.title;
+					liDOM.innerText = lict;
+					ulDOM.appendChild(liDOM);
+				}
+				break;
+			// Case: Search Furigana
+			case 'fu':
+				getFurigana(selection)
+				.then(res => {
+					keysDOM.innerText = res.furigana;
+					contentDOM.innerText= res.english;
+				});
+				break;
+			case 'pi':
+				getPinyin(selection)
+				.then(res => {
+					console.log(res.length);
+					let str = "";
+					for (let item of res) {
+						str = str.concat(item, "\n");
+						
+						console.log(item);
+						console.log(str);
+					}
+					console.log(str);
+					contentDOM.innerText = str;
+				});
+				break;
+			
+		}
+		renderBubble(e.clientX, e.clientY);
 	}
-    renderBubble(e.clientX, e.clientY);
-  }
 }, false);
 
 async function renderContent(e) {
 	var wordValue = e.target.innerText;
 	
-	console.log(wordValue);
 	let content = await getInfoWiki(wordValue, lang);
 	contentDOM.innerHTML = content;
 	
