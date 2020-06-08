@@ -3,8 +3,8 @@
 
 ## Some screenshots:
 1. Wiki
-![alt](./screenshots/wiki.jpg)
+![alt](./screenshots/wiki.JPG)
 2. Furigana
-![alt](./screenshots/furi.jpg)
+![alt](./screenshots/furi.JPG)
 3. Pinyin
-![alt](./screenshots/pinyin.jpg)
+![alt](./screenshots/pinyin.JPG)
