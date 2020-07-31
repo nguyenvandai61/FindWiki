@@ -3,16 +3,32 @@
   "version": "1.0",
   "description": "Look up Wiki with double click!",
   "manifest_version": 2,
-  "permissions": ["activeTab", "storage"],
-   "browser_action": {
-        "default_popup": "popup.html"
-    },
+  "permissions": [
+    "http://*/*", "https://*/*",
+    "activeTab",
+    "storage",
+    "alarms"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
   "content_scripts": [
     {
-	
-      "matches": ["<all_urls>"],
-		"js": ["Furi.js", "Pinyin.js","contentScript.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "background.js",
+        "Pinyin.js",
+        "contentScript.js"
+      ],
       "run_at": "document_end",
       "all_frames": true
-    }]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  }
 }

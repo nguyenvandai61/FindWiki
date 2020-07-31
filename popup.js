@@ -1,20 +1,15 @@
-
-
-var btnSetOptions = document.getElementById('btnSetOptions'); 
+var btnSetOptions = document.getElementById('btnSetOptions');
+var eles = document.getElementsByName('wikilang'); 
 btnSetOptions.addEventListener('click', setOptions);
+let lang; // Language that user choose.
+tickRadio();
 
 function setOptions() {
-
-	console.log("Set options");
-	let lang; 
-	var ele = document.getElementsByName('wikilang'); 
-				  
-	for(i = 0; i < ele.length; i++) { 
-		if(ele[i].checked) {
-			lang = ele[i].value;
+	for(i = 0; i < eles.length; i++) { 
+		if(eles[i].checked) {
+			lang = eles[i].value;
 			console.log(lang);
 		}
-					
 	} 
 	  
 	chrome.storage.sync.set({
@@ -22,12 +17,27 @@ function setOptions() {
 	  }, function() {
 		// Update status to let user know options were saved.
 		console.log("Save data lang"+ lang);
-		var status = document.getElementById('status');
-		status.textContent = 'Options saved.';
+		let status = document.getElementById('status');
+		status.textContent = 'Options '+lang+' saved.';
+
 		setTimeout(function() {
 		  status.textContent = '';
 		}, 750);
 	  });
-	
-	
+}
+
+function tickRadio() {
+	if (chrome.storage.sync)
+	{
+		chrome.storage.sync.get("wikiLang", function (obj) {
+			if (!obj) return;
+			lang = obj.wikiLang;
+			// tick radio
+			for(i = 0; i < eles.length; i++) { 
+				if(eles[i].value == lang) {
+					eles[i].checked = true;
+				}
+			} 
+		});
+	}
 }
