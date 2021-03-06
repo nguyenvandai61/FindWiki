@@ -36,6 +36,8 @@ document.addEventListener('mouseup', async function (e) {
 			if (!obj) return;
 			lang = obj.wikiLang;
 		});
+		
+		console.log(lang);
 	}
 
 	if (lang == 'undefined') lang = "en";
@@ -46,6 +48,8 @@ document.addEventListener('mouseup', async function (e) {
 	
 	let langmes = (lang == "en")?"English": "Vietnam";
 	let message = "get"+langmes+"Key";
+	
+	console.log(lang);
 	switch (lang) {
 		// Case: Search wikipedia
 		case 'en':
@@ -62,7 +66,9 @@ document.addEventListener('mouseup', async function (e) {
 			break;
 		// Case: Search Furigana
 		case 'fu':
-			chrome.runtime.sendMessage({ Message: "getFurigana", Query: selection }, function (response) {
+			message = "getFurigana"
+			chrome.runtime.sendMessage({ Message: message, Query: selection }, function (response) {
+				console.log(response);
 				if (response) {
 					keysDOM.innerHTML = response.furigana;
 					contentDOM.innerHTML = response.analyze;
@@ -83,9 +89,51 @@ document.addEventListener('mouseup', async function (e) {
 					console.log(str);
 					keysDOM.innerText = str;
 				});
-			chrome.runtime.sendMessage({ Message: "getPinyin", Query: selection }, function (response) {
+			message = "getPinyin"
+			chrome.runtime.sendMessage({ Message: message, Query: selection }, function (response) {
 				if (response) {
 					contentDOM.innerHTML = response.analyze;
+				}
+				else {
+					console.log("No Response Received");
+				}
+			})
+			break;
+		case 'ko':
+			message = "getMeanKorean"
+			chrome.runtime.sendMessage({ Message: message, Query: selection }, function (response) {
+				console.log(response);
+				if (response) {
+					keysDOM.innerHTML = response.translateResult.translatedText;
+					// contentDOM.innerHTML = response.analyze;
+				}
+				else {
+					console.log("No Response Received");
+				}
+			})
+			message = "getAnalysisKorean";
+			chrome.runtime.sendMessage({ Message: message, Query: selection }, function (response) {
+				console.log(response);
+				if (response) {
+					let listItems = response.searchResultMap.searchResultListMap.WORD.items;
+					let res_text = "";
+					listItems.map(item => {
+						
+						mean_text = "__";
+						let phonetic = item.searchPhoneticSymbolList[0].phoneticSymbol;
+						mean_text +=phonetic+"__"
+
+						let meansCollector = item.meansCollector[0];
+						meansCollector.means.map(mean => {
+							mean_text+= mean.order+"."+mean.exampleOri+"\t"+ mean.value+"   ";
+							mean_text+="</br>"
+						})
+		
+						res_text+=mean_text;
+						res_text+="</br></br>";
+						console.log(res_text);
+					})
+					contentDOM.innerHTML = res_text;
 				}
 				else {
 					console.log("No Response Received");

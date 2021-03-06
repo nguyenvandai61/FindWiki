@@ -1,7 +1,7 @@
 var btnSetOptions = document.getElementById('btnSetOptions');
 var eles = document.getElementsByName('wikilang'); 
 btnSetOptions.addEventListener('click', setOptions);
-let lang; // Language that user choose.
+var lang; // Language that user choose.
 tickRadio();
 
 function setOptions() {
